@@ -5,7 +5,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter @Setter
@@ -15,9 +17,40 @@ public class Member {
     @Column(name = "MEMBER_ID")
     private Long id;
     private String name;
-    private String city;
-    private String street;
-    private String zipcode;
+
+
+    @Embedded
+    private Period workPeriod;
+
+    @Embedded
+    private Address Address;
+
+    @ElementCollection
+    @CollectionTable(name = "FAVORITE_FOOD",
+            joinColumns = @JoinColumn(name = "MEMBER_ID"))
+    private Set<String> favoriteFood = new HashSet<>();
+
+    /*
+    @ElementCollection
+    @CollectionTable(name = "ADDRESS",
+            joinColumns = @JoinColumn(name = "MEMBER_ID"))
+    private List<Address> addressHistory= new ArrayList<>();
+    */
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name = "MEMBER_ID")
+    private List<AddressEntity> addressHistory= new ArrayList<>();
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city",
+                    column = @Column(name = "work_city")),
+            @AttributeOverride(name = "street",
+                    column = @Column(name = "work_street")),
+            @AttributeOverride(name = "zipcode",
+                    column = @Column(name = "work_zipcode")),
+    })
+    private Address workAddress;
+
 
     // mapped by 값은 현재 엔티티의 기본키와 매핑된 연관관계 주인측의 외래키 필드
     @OneToMany(mappedBy = "member")
