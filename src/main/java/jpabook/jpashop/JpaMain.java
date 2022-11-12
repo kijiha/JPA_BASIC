@@ -1,12 +1,8 @@
 package jpabook.jpashop;
 
-import jpabook.jpashop.domain.Order;
-import jpabook.jpashop.domain.OrderItem;
+import jpabook.jpashop.domain.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.*;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -19,14 +15,44 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Order order = new Order();
-            order.addOrderItem(new OrderItem());
 
+            Team team1 = new Team();
+            team1.setName("TEAM!");
+            em.persist(team1);
+
+            Team team2 = new Team();
+            team1.setName("TEAM2");
+            em.persist(team2);
+
+            Member member = new Member();
+            member.setModifiedBy("kim");
+            member.setTeam(team1);
+
+            em.persist(member);
+
+            Member member2 = new Member();
+            member.setModifiedBy("kim12");
+            member.setTeam(team2);
+
+            em.persist(member2);
 
 
             em.flush();
-            // em.detach(member1);
-            System.out.println("========================== before commit" );
+            em.clear();
+
+
+            Member findMember = em.find(Member.class, member.getId());
+            Member findMember2 = em.find(Member.class, member2.getId());
+            System.out.println(" ===================================");
+            System.out.println("findMember.team1 class = " + findMember.getTeam().getClass());
+
+            System.out.println(" ===================================");
+            System.out.println("findMember.team1 class = " + findMember.getTeam().getName());
+
+
+
+
+
 
             tx.commit();
         } catch (Exception e) {

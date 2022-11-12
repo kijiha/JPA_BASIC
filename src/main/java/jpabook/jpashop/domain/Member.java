@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-public class Member {
+public class Member extends BaseEntity{
 
     @Id @GeneratedValue
     @Column(name = "MEMBER_ID")
@@ -23,6 +23,10 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Order> orders=new ArrayList<>();
     // 관례상 null값이 반환되는것을 방지하기위헤 ArrayList로 초기화
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "TEAM_ID")
+    Team team;
 
 
 
