@@ -1,7 +1,8 @@
-package jpabook.jpashop.domain;
+package jpabook.jpashop.domain.address;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
@@ -11,9 +12,18 @@ import java.util.Objects;
 @AllArgsConstructor
 public class Address {
 
+    @Column(length = 10)
     private String city;
+
+    @Column(length = 10)
     private String street;
+
+    @Column(length = 10)
     private String zipcode;
+
+    public String getFullAddress() {
+        return getCity()+" "+getStreet()+" "+getZipcode();
+    }
 
     @Override
     public boolean equals(Object o) {
